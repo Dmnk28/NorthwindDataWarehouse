@@ -92,7 +92,7 @@ Die Erstellung von Analysen benötigt extrem viel Zeit, welche vorwiegend auf di
 * [ ] Prozeduren abrufen über Wartungsplan
 
 #### Optional: Run the Cube
-* [ ] Einen Cube bastellen
+* [ ] Einen Cube basteln
 
 ## Potenzielle Probleme
 * Identities werden bei select into mitgenommen! unbedingt Weg finden die rauszuhauen
@@ -106,3 +106,8 @@ Die Erstellung von Analysen benötigt extrem viel Zeit, welche vorwiegend auf di
 ### Auswertung
 
 ## Fazit
+
+### FAILS
+*   Die Daten von DimDate in date zu konvertieren statt als datetime zu lassen (Vorgriff, Datenverlust + prinzipiell auch Verlust von Eindeutigkeit bei Zuweisungen von Außen, da Millisekunden nun fehlen [auch wenn die Zeitangaben in der Northwind DB alle bei 00:00:00.000 stehen :D ])
+*   DimDate-Zuweisungen massiv erschwert, ebenso bei Geo. Vorteil: Keine Personenbezogenen Daten; Nachteil: Event-Bezug auch kaum wiederherstellbar. _Gäbe es hier einen besseren Ansatz?_
+*   Logisches Löschen failed completely. Trigger-Ansatz war vielversprechend, hätte weiter verfolgt werden sollen, statt der merge-Lösung. So wären die Löschvorgänge auch nachvollziehbarer (und akkurater auswertbar) geworden.  
