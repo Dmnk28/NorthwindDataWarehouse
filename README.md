@@ -1,10 +1,12 @@
-# Aufgabe: Erstelle ein Digitales Warehouse für Northwind
-siehe Aufgabenblatt von Hr. Mewes.
+# Northwind Data Warehouse
+__Aufgabenbeschreibung:__ Erstelle ein funktionales Data Warehouse zu den Northwind Beispieldaten. Verfasse hierzu Lasten- und Pflichtenheft, eine Konzeption und definiere Arbeitspakete. Berücksichtige hierbei auch automatisierte Lösungen zum Synchronisieren von Datenänderung im OLAP und zu Neuinitialisierungen des Warehouses. 
+__Zeitlimit:__ 3 Tage.
 
-## IST-Analyse
+## IST-Analyse (Fiktiv)
 ### DB-Struktur
-Die Firma Northwind verfügt über eine klassische OLTP Datenbank mit 13 Tabellen im dbo Schema. Während einige Tabellen eher statischer Natur (Categories, Territories, Region) und nur selten Schreibzugriffen ausgesetzt sind, sind andere durch eine hohe Frequenz an Datenänderungen und -eintragungen geprägt (Customers, Orders, Order Details, ...). Es existiert pro Tabelle ein Primary Key und mehrere Indices, darunter kein Columstore Index. Eine Partitionierung von Tabellen oder Indizes liegt nicht vor.
-### DB-Verwendung
+Die Firma Northwind verfügt über eine klassische OLTP Datenbank mit 11 Nutzertabellen im dbo Schema. Während einige Tabellen eher statischer Natur (Categories, Territories, Region) und nur selten Schreibzugriffen ausgesetzt sind, sind andere durch eine hohe Frequenz an Datenänderungen und -eintragungen geprägt (Customers, Orders, Order Details, ...). Es existiert pro Tabelle ein Primary Key und mehrere Indices, darunter kein Columstore Index. Eine Partitionierung von Tabellen oder Indizes liegt nicht vor.
+
+### DB-Verwendung (Fiktiv)
 Der Online-Shop von Northwind wird hat durchschnittlich ca. 10.000 Kundenbestellungen pro Tag zu verarbeiten. Die Kundschaft ist international und breit über die verschiedenen Liefergebiete verteilt, der Online-Shop/die DB muss folglich rund um die Uhr erreichbar und nutzbar sein, wobei die Hauptnutzlast auf den Nachmittag zwischen 13 und 18 Uhr fällt. Die Indices von Verkehrsdaten-tabellen werden alle zwei Tage vormittags neu erstellt, die von weniger frequentierten Datentabellen jeden Samstag um 11.00 Uhr.
 
 Werktags werden um 17.00 Uhr ausführliche Analysen zum Tagesgeschehen (bis 16.00 Uhr) oder zu verschiedenen Projekt-/Kampagnen-bezogenen Schwerpunkten von Geschäftsleitung und/oder Marketingabteilung angefordert. Sonntagnacht um 23.59 Uhr werden standardisierte Wochenberichte für die vergangenen 7 Tage erstellt.  
@@ -47,14 +49,15 @@ Die Erstellung von Analysen benötigt extrem viel Zeit, welche vorwiegend auf di
 
 ## Konzeption
 * Datawarehouse mit einer OLTP (existierende DB von Northwind), einer Staging DB und einer OLAP DB
+
 ### Arbeitspakete
 
 #### Aufbau Staging DB
-* [ ] Einrichten der DB in Testumgebung
-* [ ] Erstellung der Schemata für OLTP und OLAP
+* [X] Einrichten der Staging DB in Testumgebung
+* [X] Erstellung der Schemata für OLTP und OLAP
 
 #### Datentransfer in Staging DB
-* [ ] Trigger in OLTP DB to write Datasets to a Deleted Table: Zusätzliche Spalten "Deleted" (bit), "Deleted_DateTime" (DateTime), "Deleted_By" (varchar(50)) werden durch Trigger gesetzt auf 1, getdate und original_login(). 
+* [-] ~~Trigger in OLTP DB to write Datasets to a Deleted Table: Zusätzliche Spalten "Deleted_DateTime" (DateTime), "Deleted_By" (varchar(50)) werden durch Trigger gesetzt auf 1, getdate und original_login().~~ _EDIT: Eig. Gute Idee. Wurde verworfen, rein aus Zeitgründen. Ggf. wären Prozeduren für DML-Anweisungen sinnvoller gewesen, da in die deleted-Tabellen von Triggern keine BLOB/CLOB-Daten geladen werden und diese so nicht hätten gesichert werden können._
 * [ ] Create Deleted Tables in OLTP DB
 * [ ] Aufbau von Nutzertabellen nach Vorbild der OLTP, zusätzliche Spalten "Deleted" (bit), "Deleted_DateTime" (DateTime), "Deleted_By" (varchar(50))  
 * [ ] Prozeduren für die Select Intos für die einzelnen Tabellen bei Initialisierung erstellen
