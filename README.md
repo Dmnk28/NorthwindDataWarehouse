@@ -1,5 +1,6 @@
 # Northwind Data Warehouse
-__Aufgabenbeschreibung:__ Erstelle ein funktionales Data Warehouse zu den Northwind Beispieldaten. Verfasse hierzu Lasten- und Pflichtenheft, eine Konzeption und definiere Arbeitspakete. Berücksichtige hierbei auch automatisierte Lösungen zum Synchronisieren von Datenänderung im OLAP und zu Neuinitialisierungen des Warehouses. 
+__Aufgabenbeschreibung:__ Erstelle ein funktionales Data Warehouse zu den Northwind Beispieldaten. Verfasse hierzu Lasten- und Pflichtenheft, eine Konzeption und definiere Arbeitspakete. Berücksichtige hierbei auch automatisierte Lösungen zum Synchronisieren von Datenänderung im OLAP und zu Neuinitialisierungen des Warehouses. Einige Vorgaben, wie z.B. die verschiedenen OLAP-Tabellen existierten bereits.
+
 __Zeitlimit:__ 3 Tage.
 
 ## IST-Analyse (Fiktiv)
@@ -54,37 +55,39 @@ Die Erstellung von Analysen benötigt extrem viel Zeit, welche vorwiegend auf di
 
 #### Aufbau Staging DB
 * [X] Einrichten der Staging DB in Testumgebung
-* [X] Erstellung der Schemata für OLTP und OLAP
+* [X] Erstellung von Schemata für OLTP und OLAP
 
 #### Datentransfer in Staging DB
-* [-] ~~Trigger in OLTP DB to write Datasets to a Deleted Table: Zusätzliche Spalten "Deleted_DateTime" (DateTime), "Deleted_By" (varchar(50)) werden durch Trigger gesetzt auf 1, getdate und original_login().~~ _EDIT: Eig. Gute Idee. Wurde verworfen, rein aus Zeitgründen. Ggf. wären Prozeduren für DML-Anweisungen sinnvoller gewesen, da in die deleted-Tabellen von Triggern keine BLOB/CLOB-Daten geladen werden und diese so nicht hätten gesichert werden können._
-* [ ] Create Deleted Tables in OLTP DB
-* [ ] Aufbau von Nutzertabellen nach Vorbild der OLTP, zusätzliche Spalten "Deleted" (bit), "Deleted_DateTime" (DateTime), "Deleted_By" (varchar(50))  
-* [ ] Prozeduren für die Select Intos für die einzelnen Tabellen bei Initialisierung erstellen
-* _Constraints Indices, Views und Prozeduren sind nicht zu transferieren denn die verlangsamen nur_
+* [ ] ~~Trigger in OLTP DB to write Datasets to a Deleted Table: Zusätzliche Spalten "Deleted" (DateTime), "Deleted_By" (varchar(50)) werden durch Trigger gesetzt auf 1, getdate und original_login().~~ _EDIT: Eig. Gute Idee. Wurde verworfen, rein aus Zeitgründen. Ggf. wären Prozeduren für DML-Anweisungen sinnvoller gewesen, da in die deleted-Tabellen von Triggern keine BLOB/CLOB-Daten geladen werden und diese so nicht hätten gesichert werden können._
+* [ ] ~~Create Deleted Tables in OLTP DB~~
+* [X] Aufbau von Nutzertabellen nach Vorbild der OLTP, zusätzliche Spalten "Deleted" (DateTime), "Deleted_By" (varchar(50))  
+* [X] "Select Into"s für die einzelnen Tabellen bei Initialisierung erstellen
+_Constraints Indices, Views und Prozeduren sind nicht zu transferieren denn die verlangsamen nur_
 
 #### Denormalisierungsprozesse für die Staging DB und erstellung eines Sternschemas
-* [ ] FactOrderEvents erstellen
-* [ ] DimDate erstellen
-* [ ] DimCustomer erstellen
-* [ ] DimProducts erstellen
-* [ ] DimEmployees erstellen
-* [ ] DimCategories erstellen
-* [ ] DimGeography erstellen
-* [ ] DimSuppliers erstellen
-* [ ] Prozeduren für die Select intos für die Initialisierung erstellen
-* [ ] Prozeduren ausführen
+* [X] DimDate erstellen
+* [X] DimCustomer erstellen
+* [X] DimProducts erstellen
+* [X] DimEmployees erstellen
+* [X] DimCategories erstellen
+* [X] DimGeography erstellen
+* [X] DimSuppliers erstellen
+* [X] FactOrderEvents erstellen
+* [X] "Select into"s für die Initialisierung erstellen. 
 
 #### Aufbau OLAP
-* [ ] Einrichten der OLAP DB in Testumgebung
+* [X] Einrichten der OLAP DB in Testumgebung
+* [X] Erstellen der Schemata für Facts und Dimension
 
 #### Datentransfer des Sternschemas von Staging DB zur OLAP DB
-* [ ] Prozeduren für das Importieren ganzer Fact & Dim Tabellen aus der Staging schreiben
+* [X] Importieren der Fact & Dim Tabellen aus der Staging DB
+* [X] Erstellen der Primary Keys in den Dimensionstabellen
+* [X] Erstellen des Primary Keys und der Foreign Keys für die Facts 
 * [ ] Wartungspläne für die Index-Erstellung schreiben 
 
 #### Synchronisierung
-* [ ] Merge-Befehle zwischen OLTP und Staging schreiben
-* [ ] Prozeduren für Datenaufbereitung auf Staging schreiben
+* [X] Merge-Befehle zwischen OLTP und Staging schreiben
+* [ ] Merge-Befehle für Datenaufbereitung auf Staging schreiben
 * [ ] Merge-Befehle zwischen Staging und OLAP schreiben
 * [ ] Wartungsplan aus MergeBefehlen und Prozeduren zusammenstellen
 * [ ] Indizierungsprozesse auf OLAP automatisieren (Wartungspläne)
@@ -99,6 +102,7 @@ Die Erstellung von Analysen benötigt extrem viel Zeit, welche vorwiegend auf di
 
 ## Potenzielle Probleme
 * Identities werden bei select into mitgenommen! unbedingt Weg finden die rauszuhauen
+* Bei halbjährigen Neuinitialisierungen würden ohne Tabellen für in der OLTP gelöschte Datensätze mit jeder Neuinitialisierung die vormals nur logisch gelöschten (via Merge Befehle) Datensätze e 
 
 ## Testing
 * [ ] 
