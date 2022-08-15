@@ -101,16 +101,21 @@ _Constraints Indices, Views und Prozeduren sind nicht zu transferieren denn die 
 * [ ] Einen Cube basteln
 
 ## Potenzielle Probleme
-* Identities werden bei select into mitgenommen! unbedingt Weg finden die rauszuhauen
+* Identities werden bei select into mitgenommen! Könnten später Probleme verursachen
 * Bei halbjährigen Neuinitialisierungen würden ohne Tabellen für in der OLTP gelöschte Datensätze mit jeder Neuinitialisierung die vormals nur logisch gelöschten (via Merge Befehle) Datensätze e 
 
 ## Testing
-* [ ] 
+* [ ] Kontrolle der Select Into's via ```exec sp_help <Tabellenname>``` und stichprobenartig auch inhaltlich via ```select * from <Tabellenname>``` 
+* [ ] Kontrolle der Merge-Befehle auf Inhaltlicher Ebene (nach Eingebe neuer Informationen in OLTP) 
+* [ ] Kontrolle von eventuell fehlenden Indices via geschätzten Ausführungsplan anzeigen lassen bei üblichen Abfragen von Northwind auf der OLAP DB
+* [ ] Kontrolle der Verwendung aller erstellten Indices via Ausführungsplan anzeigen lassen bei üblichen Abfragen von Northwind auf der OLAP DB 
+* [ ] Kontrolle der Verwendung der vorhandenen Indices vie Ausführungsplan anzeigen lassen 
 
 ### Tests
 * [ ] 
 
 ### Auswertung
+
 
 ## Fazit
 
